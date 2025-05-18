@@ -78,7 +78,7 @@ npm run build
 
 ## 🙋‍♀️ Author
 
-Built with love and focus by [Smrithi Piedy](https://github.com/smrithipiedy)
+Built with love and focus by [Smrithi P] for the Vibe Coding challenge held by Google Developer Groups, Chennai.(https://github.com/smrithipiedy)
 
 ## 📜 License
 
