@@ -68,14 +68,6 @@ npm run dev
 npm run build
 ```
 
-## 💡 Future Enhancements
-
-- 🎖️ XP/Leveling system for completed tasks
-- 📊 Productivity insights & charts
-- 🔔 Custom timer alerts & notifications
-- 💾 Task persistence using Supabase
-- 🌙 Dark mode toggle
-
 ## 🙋‍♀️ Author
 
 Built with love and focus by [Smrithi P] for the Vibe Coding challenge held by Google Developer Groups, Chennai.(https://github.com/smrithipiedy)
