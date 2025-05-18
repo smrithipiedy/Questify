@@ -1,68 +1,84 @@
 # Questify 🧩⏳  
 _A Gamified Task Tracker & Focus Timer_
 
-**Questify** transforms your daily tasks into thrilling quests, making productivity more fun and engaging. With a sleek interface and a built-in Pomodoro-style timer, it helps you stay on track, manage time effectively, and celebrate progress—one quest at a time.
+**Questify** is a gamified productivity tool built with **TypeScript**, **Tailwind CSS**, and **Supabase**. It turns your daily tasks into “quests” and incorporates a Pomodoro-style **focus timer**, helping you stay engaged and productive through a playful experience.
 
 ## 🌟 Features
 
-- ✅ **Task Creation & Management**: Add, view, and delete tasks seamlessly.
-- 🎯 **Gamified UI**: Each task is treated as a quest to keep you motivated.
-- ⏱️ **Focus Timer**: Built-in Pomodoro timer with customizable work and break durations.
-- 🎉 **Completion Feedback**: Celebrate every completed quest with visual confirmation.
-- 📱 **Responsive Design**: Works smoothly across desktop and mobile browsers.
+- ✅ **Add/Delete Tasks (Quests)**  
+- 🧠 **Gamified UX** with dynamic visuals  
+- ⏱️ **Pomodoro Timer** with work and break intervals  
+- 📋 **Task Management System**  
+- 🔗 **Supabase Integration** for future backend features  
+- ⚡ **Vite** for fast build and development  
+- 💅 **Tailwind CSS** for utility-first styling  
+- 🌐 **Fully Responsive** on mobile and desktop
 
-## 🛠️ Built With
+## 🧰 Tech Stack
 
-- **HTML5** – Structure and content
-- **CSS3** – Styling and animations
-- **JavaScript** – Logic and interactivity
+- **Framework/Build Tool**: Vite
+- **Frontend**: TypeScript, HTML, Tailwind CSS
+- **State & Logic**: Vanilla JavaScript + TS
+- **Backend (placeholder)**: Supabase
+- **Other Tools**: PostCSS, ESLint, dotenv
 
 ## 📸 Live Preview
 
-👉 [View the App Live](https://questify-task-tracker.netlify.app/)
+👉 [View Live App](https://questify-task-tracker.netlify.app/)
 
-![Questify Screenshot](screenshot.png)  
-<sub>_Tip: Add a screenshot named `screenshot.png` in your repo for better visual preview._</sub>
-
-## 🚀 Getting Started
-
-To run the project locally:
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/smrithipiedy/Questify.git
-   ```
-
-2. **Navigate to the folder:**
-
-   ```bash
-   cd Questify
-   ```
-
-3. **Open `index.html` in your browser**, or use a live server extension for best results.
-
-## 📂 Project Structure
+## 🛠 Project Structure
 
 ```
 Questify/
-├── index.html         # Main HTML page
-├── style.css          # App styling
-├── script.js          # Core logic and timer functions
-└── README.md          # Project documentation
+├── .bolt/                # Bolt/third-party configs
+├── src/                  # All source code
+├── supabase/             # Supabase project structure
+├── index.html            # Root HTML
+├── vite.config.ts        # Vite configuration
+├── tailwind.config.js    # Tailwind setup
+├── tsconfig.json         # TypeScript config
+├── .env                  # Environment variables
+└── README.md             # Project docs
+```
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/smrithipiedy/Questify.git
+cd Questify
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Run the App
+
+```bash
+npm run dev
+```
+
+### 4. Build for Production
+
+```bash
+npm run build
 ```
 
 ## 💡 Future Enhancements
 
-- ⏳ Session history & analytics
-- 🌈 Dark mode
-- 🔔 Sound alerts and notifications
-- 💾 LocalStorage for persistent data
-- 🏆 XP system & streak rewards
+- 🎖️ XP/Leveling system for completed tasks
+- 📊 Productivity insights & charts
+- 🔔 Custom timer alerts & notifications
+- 💾 Task persistence using Supabase
+- 🌙 Dark mode toggle
 
 ## 🙋‍♀️ Author
 
-Crafted with passion by [Smrithi Piedy](https://github.com/smrithipiedy)
+Built with love and focus by [Smrithi Piedy](https://github.com/smrithipiedy)
 
 ## 📜 License
 
