@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { TaskProvider } from './context/TaskContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import Login from './components/auth/Login';
 import SignUp from './components/auth/SignUp';
 import ForgotPassword from './components/auth/ForgotPassword';
@@ -48,29 +49,32 @@ function App() {
     <Router>
       <AuthProvider>
         <TaskProvider>
-          <div className="min-h-screen bg-gradient-to-b from-purple-900 to-gray-900 text-white">
+          <div className="min-h-screen flex flex-col bg-gradient-to-b from-purple-900 to-gray-900 text-white">
             <Header />
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/" element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              } />
-              <Route path="/rewards" element={
-                <PrivateRoute>
-                  <RewardCollection />
-                </PrivateRoute>
-              } />
-              <Route path="/shop" element={
-                <PrivateRoute>
-                  <CharacterShop />
-                </PrivateRoute>
-              } />
-            </Routes>
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/" element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
+                } />
+                <Route path="/rewards" element={
+                  <PrivateRoute>
+                    <RewardCollection />
+                  </PrivateRoute>
+                } />
+                <Route path="/shop" element={
+                  <PrivateRoute>
+                    <CharacterShop />
+                  </PrivateRoute>
+                } />
+              </Routes>
+            </main>
+            <Footer />
           </div>
         </TaskProvider>
       </AuthProvider>

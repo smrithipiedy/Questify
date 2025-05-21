@@ -5,7 +5,7 @@ export const characters: Character[] = [
     id: 'wizard',
     name: 'Professor Pixel',
     description: 'A wise wizard who helps with analytical tasks and problem-solving.',
-    imageUrl: 'https://i.ibb.co/VqGhZyP/wizard.png',
+    imageUrl: '[character image file here]',
     cost: 100,
     personality: 'analytical',
     unlocked: false,
@@ -20,7 +20,7 @@ export const characters: Character[] = [
     id: 'knight',
     name: 'Sir Bytealot',
     description: 'A brave knight who encourages persistence and dedication.',
-    imageUrl: 'https://i.ibb.co/0jZQYv9/knight.png',
+    imageUrl: '[character image file here]',
     cost: 150,
     personality: 'encouraging',
     unlocked: false,
@@ -35,7 +35,7 @@ export const characters: Character[] = [
     id: 'artist',
     name: 'Luna Palette',
     description: 'A creative spirit who helps with innovative thinking.',
-    imageUrl: 'https://i.ibb.co/XkQB3vN/artist.png',
+    imageUrl: '[character image file here]',
     cost: 200,
     personality: 'creative',
     unlocked: false,
@@ -50,7 +50,7 @@ export const characters: Character[] = [
     id: 'strategist',
     name: 'Commander Cache',
     description: 'A tactical genius who helps with planning and organization.',
-    imageUrl: 'https://i.ibb.co/wSQX4Bh/strategist.png',
+    imageUrl: '[character image file here]',
     cost: 250,
     personality: 'strategic',
     unlocked: false,
@@ -59,6 +59,66 @@ export const characters: Character[] = [
       "Identify and eliminate potential distractions",
       "Set clear milestones for your task",
       "Prioritize tasks based on importance and urgency"
+    ]
+  },
+  {
+    id: 'sage',
+    name: 'Master Mindful',
+    description: 'A meditation master who helps with focus and concentration.',
+    imageUrl: '[character image file here]',
+    cost: 300,
+    personality: 'encouraging',
+    unlocked: false,
+    tips: [
+      "Focus on your breath to center yourself",
+      "Practice mindfulness during study sessions",
+      "Stay present in the moment",
+      "Let go of distracting thoughts gently"
+    ]
+  },
+  {
+    id: 'scientist',
+    name: 'Dr. Data',
+    description: 'A brilliant scientist who helps with research and analysis.',
+    imageUrl: '[character image file here]',
+    cost: 350,
+    personality: 'analytical',
+    unlocked: false,
+    tips: [
+      "Analyze patterns in your study habits",
+      "Test different learning methods",
+      "Document your findings",
+      "Review and iterate your approach"
+    ]
+  },
+  {
+    id: 'explorer',
+    name: 'Adventure Alex',
+    description: 'An explorer who makes learning an exciting journey.',
+    imageUrl: '[character image file here]',
+    cost: 400,
+    personality: 'creative',
+    unlocked: false,
+    tips: [
+      "Turn your study session into an adventure",
+      "Discover new ways to learn",
+      "Explore different subjects",
+      "Make learning fun and engaging"
+    ]
+  },
+  {
+    id: 'librarian',
+    name: 'Sage Scholar',
+    description: 'A knowledgeable librarian who helps organize information.',
+    imageUrl: '[character image file here]',
+    cost: 450,
+    personality: 'strategic',
+    unlocked: false,
+    tips: [
+      "Categorize your study materials",
+      "Create effective study guides",
+      "Use efficient note-taking methods",
+      "Build a knowledge management system"
     ]
   }
 ];
