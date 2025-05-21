@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { playSound } from '../../utils/sounds';
+import { motion } from 'framer-motion';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -22,10 +23,43 @@ const Login: React.FC = () => {
     }
   };
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
       <div className="bg-gray-900 p-8 rounded-lg pixel-border max-w-md w-full mx-4">
-        <h2 className="text-2xl text-white mb-6 font-['Press_Start_2P'] text-center">Login</h2>
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="text-center mb-8"
+        >
+          {Array.from("Welcome to Questify!").map((char, index) => (
+            <motion.span
+              key={index}
+              variants={item}
+              className="inline-block text-2xl text-white font-['Press_Start_2P'] drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]"
+              style={{
+                animation: `wave 1.5s ease-in-out ${index * 0.1}s infinite`
+              }}
+            >
+              {char === " " ? "\u00A0" : char}
+            </motion.span>
+          ))}
+        </motion.div>
         
         {error && (
           <div className="bg-red-500 text-white p-3 rounded mb-4 font-['Press_Start_2P'] text-xs">
