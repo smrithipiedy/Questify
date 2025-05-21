@@ -2,6 +2,7 @@
 _A Gamified Task Tracker & Focus Timer_
 
 **Questify** is a gamified productivity tool built with Bolt, a vibe coding platform using **TypeScript**, **Tailwind CSS**, and **Supabase**. It turns your daily tasks into “quests” and incorporates a Pomodoro-style **focus timer**, helping you stay engaged and productive through a playful experience.
+P.S, this was my winning project at the Google Developer Groups Chennai Vibe Coding fest! 
 
 ## 🌟 Features
 
