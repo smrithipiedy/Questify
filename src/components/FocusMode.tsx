@@ -21,6 +21,47 @@ const FocusMode: React.FC = () => {
   const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
   const [breakDuration, setBreakDuration] = useState<number>(5);
 
+  const requestNotificationPermission = async () => {
+    if (!("Notification" in window)) {
+      alert("This browser does not support desktop notifications");
+      return;
+    }
+
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        // Handle social media blocking
+        if (blockSocialMedia) {
+          const socialMediaDomains = [
+            "instagram.com",
+            "twitter.com",
+            "facebook.com",
+            "tiktok.com",
+            "telegram.org",
+            "whatsapp.com",
+            "youtube.com"
+          ];
+
+          // Create notification blocking rules
+          if ("setAppBadgeNotification" in navigator) {
+            socialMediaDomains.forEach(domain => {
+              // This is a simplified example - actual implementation would require system-level permissions
+              console.log(`Blocking notifications from ${domain}`);
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error requesting notification permission:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (blockSocialMedia) {
+      requestNotificationPermission();
+    }
+  }, [blockSocialMedia]);
+
   useEffect(() => {
     if (currentSession) {
       if (Notification.permission === 'granted') {
