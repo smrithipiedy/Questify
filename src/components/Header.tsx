@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTaskContext } from '../context/TaskContext';
 import { useAuth } from '../context/AuthContext';
 import { playSound } from '../utils/sounds';
+import TaskHistoryModal from './TaskHistoryModal';
 
 const Header: React.FC = () => {
   const { state } = useTaskContext();
@@ -12,6 +13,7 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showTaskHistory, setShowTaskHistory] = useState(false);
 
   const isAuthPage = location.pathname === '/login' || 
                     location.pathname === '/signup' || 
@@ -49,10 +51,13 @@ const Header: React.FC = () => {
           
           {session && !isAuthPage && (
             <div className="hidden md:flex items-center gap-4">
-              <div className="flex items-center gap-2 bg-blue-600 p-2 pixel-corners">
+              <button 
+                onClick={() => setShowTaskHistory(true)}
+                className="flex items-center gap-2 bg-blue-600 p-2 pixel-corners cursor-pointer"
+              >
                 <Trophy size={16} className="text-yellow-300" />
                 <span>{stats.tasksCompleted} Tasks</span>
-              </div>
+              </button>
               
               <div className="flex items-center gap-2 bg-blue-600 p-2 pixel-corners">
                 <Star size={16} className="text-yellow-300" />
@@ -126,6 +131,11 @@ const Header: React.FC = () => {
           </nav>
         </div>
       )}
+
+      <TaskHistoryModal
+        isOpen={showTaskHistory}
+        onClose={() => setShowTaskHistory(false)}
+      />
     </header>
   );
 };

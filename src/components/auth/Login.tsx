@@ -39,19 +39,19 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
-      <div className="bg-gray-900 p-8 rounded-lg pixel-border max-w-md w-full mx-4">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="text-center mb-8"
-        >
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] relative">
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="absolute top-[10%] w-full text-center z-10"
+      >
+        <div className="inline-block">
           {Array.from("Welcome to Questify!").map((char, index) => (
             <motion.span
               key={index}
               variants={item}
-              className="inline-block text-2xl text-white font-['Press_Start_2P'] drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]"
+              className="inline-block text-4xl md:text-6xl text-white font-['Press_Start_2P'] welcome-text"
               style={{
                 animation: `wave 1.5s ease-in-out ${index * 0.1}s infinite`
               }}
@@ -59,8 +59,10 @@ const Login: React.FC = () => {
               {char === " " ? "\u00A0" : char}
             </motion.span>
           ))}
-        </motion.div>
-        
+        </div>
+      </motion.div>
+
+      <div className="bg-gray-900 p-8 rounded-lg pixel-border max-w-md w-full mx-4 z-20">
         {error && (
           <div className="bg-red-500 text-white p-3 rounded mb-4 font-['Press_Start_2P'] text-xs">
             {error}
