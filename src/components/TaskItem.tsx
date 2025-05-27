@@ -4,6 +4,7 @@ import { Task, TaskPriority } from '../types';
 import { useTaskContext } from '../context/TaskContext';
 import { playSound } from '../utils/sounds';
 import Modal from 'react-modal';
+import VictoryEffect from './VictoryEffect';
 
 Modal.setAppElement('#root');
 
@@ -19,6 +20,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   const [editedPriority, setEditedPriority] = useState<TaskPriority>(task.priority);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmStep, setConfirmStep] = useState(0);
+  const [showVictoryEffect, setShowVictoryEffect] = useState(false);
+  const [currentReward, setCurrentReward] = useState<any>(null);
 
   const handleComplete = () => {
     setShowConfirmModal(true);
@@ -30,14 +33,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
       return;
     }
     
-    playSound('TASK_COMPLETE');
-    completeTask(task.id);
+    const reward = completeTask(task.id);
+    setCurrentReward(reward);
+    setShowVictoryEffect(true);
     setShowConfirmModal(false);
     setConfirmStep(0);
-    
-    setTimeout(() => {
-      playSound('REWARD_UNLOCK');
-    }, 500);
   };
 
   const handleDelete = () => {
@@ -226,6 +226,14 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
           </div>
         </div>
       </Modal>
+
+      {showVictoryEffect && currentReward && (
+        <VictoryEffect
+          reward={currentReward}
+          onClose={() => setShowVictoryEffect(false)}
+          source="task"
+        />
+      )}
     </>
   );
 };

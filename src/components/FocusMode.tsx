@@ -4,6 +4,7 @@ import { useTaskContext } from '../context/TaskContext';
 import { playSound } from '../utils/sounds';
 import StudyBuddy from './StudyBuddy';
 import Modal from 'react-modal';
+import VictoryEffect from './VictoryEffect';
 
 Modal.setAppElement('#root');
 
@@ -20,6 +21,8 @@ const FocusMode: React.FC = () => {
   const [showCompletionModal, setShowCompletionModal] = useState<boolean>(false);
   const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
   const [breakDuration, setBreakDuration] = useState<number>(5);
+  const [currentReward, setCurrentReward] = useState<any>(null);
+  const [showVictoryEffect, setShowVictoryEffect] = useState<boolean>(false);
 
   const requestNotificationPermission = async () => {
     if (!("Notification" in window)) {
@@ -83,8 +86,9 @@ const FocusMode: React.FC = () => {
             }
             
             if (currentSession.isBreak) {
-              endFocusSession();
-              setShowCompletionModal(true);
+              const reward = endFocusSession();
+              setCurrentReward(reward);
+              setShowVictoryEffect(true);
             } else {
               new Notification('Focus Session Complete!', {
                 body: 'Would you like to take a break?',
@@ -140,16 +144,18 @@ const FocusMode: React.FC = () => {
 
   const handleSkipBreak = () => {
     setShowBreakModal(false);
-    endFocusSession();
-    setShowCompletionModal(true);
+    const reward = endFocusSession();
+    setCurrentReward(reward);
+    setShowVictoryEffect(true);
   };
 
   const handleEndSession = () => {
     if (soundEnabled) {
       playSound('BUTTON_CLICK');
     }
-    endFocusSession();
-    setShowCompletionModal(true);
+    const reward = endFocusSession();
+    setCurrentReward(reward);
+    setShowVictoryEffect(true);
   };
   
   const handleToggleSound = () => {
@@ -384,6 +390,17 @@ const FocusMode: React.FC = () => {
           </div>
         </div>
       </Modal>
+
+      {showVictoryEffect && currentReward && (
+        <VictoryEffect
+          reward={currentReward}
+          onClose={() => {
+            setShowVictoryEffect(false);
+            setShowCompletionModal(true);
+          }}
+          source="focus"
+        />
+      )}
 
       <Modal
         isOpen={showCompletionModal}
