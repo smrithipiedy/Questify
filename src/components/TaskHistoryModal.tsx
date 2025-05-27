@@ -21,7 +21,7 @@ const TaskHistoryModal: React.FC<TaskHistoryModalProps> = ({ isOpen, onClose }) 
     >
       <h2 className="text-white font-['Press_Start_2P'] text-lg mb-6">Task History</h2>
       <div className="max-h-[60vh] overflow-y-auto">
-        {taskHistory.map((entry) => (
+        {(taskHistory || []).map((entry) => (
           <div key={entry.id} className="bg-gray-800 p-4 mb-4 pixel-box">
             <div className="flex justify-between items-start">
               <div>
