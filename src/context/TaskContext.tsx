@@ -11,6 +11,7 @@ interface TaskState {
   stats: Stats;
   currentSession: FocusSession | null;
   characters: Character[];
+  taskHistory: any[];
 }
 
 type TaskAction =
@@ -20,7 +21,7 @@ type TaskAction =
   | { type: 'COMPLETE_TASK'; payload: string }
   | { type: 'ADD_REWARD'; payload: Reward }
   | { type: 'START_FOCUS_SESSION'; payload: FocusSession }
-  | { type: 'END_FOCUS_SESSION'; payload: Date }
+  | { type: 'END_FOCUS_SESSION'; payload: { endTime: Date; completed: boolean } }
   | { type: 'UPDATE_STATS'; payload: Partial<Stats> }
   | { type: 'UNLOCK_CHARACTER'; payload: { characterId: string; cost: number } };
 
@@ -38,6 +39,7 @@ const initialState: TaskState = {
   },
   currentSession: null,
   characters: initialCharacters,
+  taskHistory: [],
 };
 
 const loadState = (): TaskState => {
@@ -72,6 +74,7 @@ const loadState = (): TaskState => {
             }
           : null,
         characters: parsedState.characters || initialCharacters,
+        taskHistory: parsedState.taskHistory || [],
       };
     }
   } catch (e) {
@@ -89,6 +92,11 @@ const calculateTaskCoins = (task: Task): number => {
   };
   
   return baseCoins * priorityMultiplier[task.priority];
+};
+
+const calculateFocusCoins = (duration: number): number => {
+  // 1 coin per minute of focus
+  return Math.floor(duration);
 };
 
 const isSameDay = (date1: Date, date2: Date): boolean => {
@@ -135,6 +143,7 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
       const newReward = {
         ...getRandomReward(),
         coins: earnedCoins,
+        source: 'task',
       };
 
       playSound('VICTORY');
@@ -171,11 +180,11 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
 
     case 'START_FOCUS_SESSION': {
       const today = new Date();
-      let newPomodoroStreak = state.stats.pomodoroStreak;
+      let newPomodoroStreak = state.stats.pomodoroStreak || 0;
       let lastPomodoroDate = state.stats.lastPomodoroDate;
 
       if (!lastPomodoroDate || !isSameDay(new Date(lastPomodoroDate), today)) {
-        if (isConsecutiveDay(new Date(lastPomodoroDate || ''), today)) {
+        if (lastPomodoroDate && isConsecutiveDay(new Date(lastPomodoroDate), today)) {
           newPomodoroStreak += 1;
         } else {
           newPomodoroStreak = 1;
@@ -200,13 +209,24 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
 
       const endedSession = {
         ...state.currentSession,
-        endTime: action.payload,
+        endTime: action.payload.endTime,
       };
 
       const sessionDurationMinutes =
         (endedSession.endTime!.getTime() - endedSession.startTime.getTime()) / (1000 * 60);
 
-      const focusCoins = Math.floor(sessionDurationMinutes / 5); // 1 coin per 5 minutes of focus
+      let newReward = null;
+      let earnedCoins = 0;
+
+      // Only give reward if session was completed
+      if (action.payload.completed) {
+        earnedCoins = calculateFocusCoins(sessionDurationMinutes);
+        newReward = {
+          ...getRandomReward(),
+          coins: earnedCoins,
+          source: 'focus',
+        };
+      }
 
       return {
         ...state,
@@ -214,10 +234,12 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
         focusSessions: state.focusSessions.map((session) =>
           session.id === endedSession.id ? endedSession : session
         ),
+        rewards: newReward ? [...state.rewards, newReward] : state.rewards,
         stats: {
           ...state.stats,
           totalFocusTime: state.stats.totalFocusTime + sessionDurationMinutes,
-          coins: state.stats.coins + focusCoins,
+          rewardsCollected: newReward ? state.stats.rewardsCollected + 1 : state.stats.rewardsCollected,
+          coins: state.stats.coins + earnedCoins,
         },
       };
     }
@@ -257,9 +279,9 @@ interface TaskContextProps {
   addTask: (task: Omit<Task, 'id' | 'createdAt'>) => void;
   updateTask: (task: Task) => void;
   deleteTask: (id: string) => void;
-  completeTask: (id: string) => void;
-  startFocusSession: (duration: number, characterId?: string) => void;
-  endFocusSession: () => void;
+  completeTask: (id: string) => Reward;
+  startFocusSession: (duration: number, characterId?: string, isBreak?: boolean) => void;
+  endFocusSession: () => Reward | null;
   unlockCharacter: (characterId: string, cost: number) => void;
 }
 
@@ -267,7 +289,6 @@ const TaskContext = createContext<TaskContextProps | undefined>(undefined);
 
 export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(taskReducer, initialState, loadState);
-  const [showVictoryEffect, setShowVictoryEffect] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('8bitTaskState', JSON.stringify(state));
@@ -343,23 +364,37 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     dispatch({ type: 'DELETE_TASK', payload: id });
   };
 
-  const completeTask = (id: string) => {
+  const completeTask = (id: string): Reward => {
     dispatch({ type: 'COMPLETE_TASK', payload: id });
-    setShowVictoryEffect(true);
+    const reward = state.rewards[state.rewards.length - 1];
+    return reward;
   };
 
-  const startFocusSession = (duration: number, characterId?: string) => {
+  const startFocusSession = (duration: number, characterId?: string, isBreak?: boolean) => {
     const newSession: FocusSession = {
       id: crypto.randomUUID(),
       startTime: new Date(),
       duration,
       characterId,
+      isBreak,
     };
     dispatch({ type: 'START_FOCUS_SESSION', payload: newSession });
   };
 
-  const endFocusSession = () => {
-    dispatch({ type: 'END_FOCUS_SESSION', payload: new Date() });
+  const endFocusSession = (): Reward | null => {
+    const completed = true; // We'll assume the session was completed successfully
+    dispatch({ 
+      type: 'END_FOCUS_SESSION', 
+      payload: { 
+        endTime: new Date(),
+        completed
+      } 
+    });
+    
+    if (completed && state.rewards.length > 0) {
+      return state.rewards[state.rewards.length - 1];
+    }
+    return null;
   };
 
   const unlockCharacter = (characterId: string, cost: number) => {
