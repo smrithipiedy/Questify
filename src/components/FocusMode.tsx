@@ -23,6 +23,7 @@ const FocusMode: React.FC = () => {
   const [breakDuration, setBreakDuration] = useState<number>(5);
   const [currentReward, setCurrentReward] = useState<any>(null);
   const [showVictoryEffect, setShowVictoryEffect] = useState<boolean>(false);
+  const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
 
   const requestNotificationPermission = async () => {
     if (!("Notification" in window)) {
@@ -33,7 +34,6 @@ const FocusMode: React.FC = () => {
     try {
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
-        // Handle social media blocking
         if (blockSocialMedia) {
           const socialMediaDomains = [
             "instagram.com",
@@ -45,10 +45,8 @@ const FocusMode: React.FC = () => {
             "youtube.com"
           ];
 
-          // Create notification blocking rules
           if ("setAppBadgeNotification" in navigator) {
             socialMediaDomains.forEach(domain => {
-              // This is a simplified example - actual implementation would require system-level permissions
               console.log(`Blocking notifications from ${domain}`);
             });
           }
@@ -76,6 +74,7 @@ const FocusMode: React.FC = () => {
       const remainingTime = Math.max(0, endTime.getTime() - new Date().getTime());
       
       setTimeLeft(Math.floor(remainingTime / 1000));
+      setSessionStartTime(currentSession.startTime);
       
       const timer = setInterval(() => {
         setTimeLeft((prevTime) => {
@@ -86,9 +85,11 @@ const FocusMode: React.FC = () => {
             }
             
             if (currentSession.isBreak) {
-              const reward = endFocusSession();
-              setCurrentReward(reward);
-              setShowVictoryEffect(true);
+              const reward = endFocusSession(true);
+              if (reward) {
+                setCurrentReward(reward);
+                setShowVictoryEffect(true);
+              }
             } else {
               new Notification('Focus Session Complete!', {
                 body: 'Would you like to take a break?',
@@ -144,18 +145,30 @@ const FocusMode: React.FC = () => {
 
   const handleSkipBreak = () => {
     setShowBreakModal(false);
-    const reward = endFocusSession();
-    setCurrentReward(reward);
-    setShowVictoryEffect(true);
+    const reward = endFocusSession(true);
+    if (reward) {
+      setCurrentReward(reward);
+      setShowVictoryEffect(true);
+    }
   };
 
   const handleEndSession = () => {
     if (soundEnabled) {
       playSound('BUTTON_CLICK');
     }
-    const reward = endFocusSession();
-    setCurrentReward(reward);
-    setShowVictoryEffect(true);
+
+    // Calculate actual elapsed time
+    if (sessionStartTime) {
+      const elapsedMinutes = (new Date().getTime() - sessionStartTime.getTime()) / (1000 * 60);
+      const targetDuration = currentSession?.duration || 0;
+      
+      // Only give reward if at least 95% of the target duration was completed
+      const reward = endFocusSession(elapsedMinutes >= targetDuration * 0.95);
+      if (reward) {
+        setCurrentReward(reward);
+        setShowVictoryEffect(true);
+      }
+    }
   };
   
   const handleToggleSound = () => {

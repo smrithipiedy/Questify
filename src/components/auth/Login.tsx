@@ -63,6 +63,8 @@ const Login: React.FC = () => {
       </motion.div>
 
       <div className="bg-gray-900 p-8 rounded-lg pixel-border max-w-md w-full mx-4 z-20">
+        <h2 className="text-2xl text-white mb-6 font-['Press_Start_2P'] text-center">Login</h2>
+        
         {error && (
           <div className="bg-red-500 text-white p-3 rounded mb-4 font-['Press_Start_2P'] text-xs">
             {error}

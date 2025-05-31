@@ -218,7 +218,7 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
       let newReward = null;
       let earnedCoins = 0;
 
-      // Only give reward if session was completed
+      // Only give reward if session was completed successfully
       if (action.payload.completed) {
         earnedCoins = calculateFocusCoins(sessionDurationMinutes);
         newReward = {
@@ -281,7 +281,7 @@ interface TaskContextProps {
   deleteTask: (id: string) => void;
   completeTask: (id: string) => Reward;
   startFocusSession: (duration: number, characterId?: string, isBreak?: boolean) => void;
-  endFocusSession: () => Reward | null;
+  endFocusSession: (completed: boolean) => Reward | null;
   unlockCharacter: (characterId: string, cost: number) => void;
 }
 
@@ -381,8 +381,7 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     dispatch({ type: 'START_FOCUS_SESSION', payload: newSession });
   };
 
-  const endFocusSession = (): Reward | null => {
-    const completed = true; // We'll assume the session was completed successfully
+  const endFocusSession = (completed: boolean): Reward | null => {
     dispatch({ 
       type: 'END_FOCUS_SESSION', 
       payload: { 
