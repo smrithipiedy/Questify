@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Coins, Lock, Check } from 'lucide-react';
+import { ShoppingBag, Lock, Check } from 'lucide-react';
 import { Character } from '../types';
 import { useTaskContext } from '../context/TaskContext';
 import { playSound } from '../utils/sounds';
@@ -26,12 +26,6 @@ const CharacterShop: React.FC = () => {
           <ShoppingBag size={20} className="mr-2 text-yellow-400" />
           Study Buddy Shop
         </h2>
-        <div className="flex items-center bg-yellow-600 px-3 py-2 pixel-corners">
-          <Coins size={16} className="text-yellow-300 mr-2" />
-          <span className="text-white font-['Press_Start_2P'] text-xs">
-            {stats?.coins ?? 0} coins
-          </span>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trophy, Star, Clock, Menu, X } from 'lucide-react';
+import { Trophy, Star, Clock, Menu, X, Coins } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTaskContext } from '../context/TaskContext';
 import { useAuth } from '../context/AuthContext';
@@ -50,21 +50,26 @@ const Header: React.FC = () => {
           </div>
           
           {session && !isAuthPage && (
-            <div className="hidden md:flex items-center gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 bg-yellow-600 p-2 pixel-corners">
+                <Coins size={16} className="text-yellow-300" />
+                <span>{stats?.coins ?? 0}</span>
+              </div>
+              
               <button 
                 onClick={() => setShowTaskHistory(true)}
-                className="flex items-center gap-2 bg-blue-600 p-2 pixel-corners cursor-pointer"
+                className="hidden md:flex items-center gap-2 bg-blue-600 p-2 pixel-corners cursor-pointer"
               >
                 <Trophy size={16} className="text-yellow-300" />
                 <span>{stats.tasksCompleted} Tasks</span>
               </button>
               
-              <div className="flex items-center gap-2 bg-blue-600 p-2 pixel-corners">
+              <div className="hidden md:flex items-center gap-2 bg-blue-600 p-2 pixel-corners">
                 <Star size={16} className="text-yellow-300" />
                 <span>{stats.currentStreak} Day Streak</span>
               </div>
               
-              <div className="flex items-center gap-2 bg-blue-600 p-2 pixel-corners">
+              <div className="hidden md:flex items-center gap-2 bg-blue-600 p-2 pixel-corners">
                 <Clock size={16} className="text-yellow-300" />
                 <span>{Math.round(stats.totalFocusTime)} Mins Focused</span>
               </div>
@@ -73,7 +78,6 @@ const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="absolute top-full left-0 w-64 bg-blue-500 mt-1 p-4 pixel-border z-50">
           <nav className="space-y-4">
