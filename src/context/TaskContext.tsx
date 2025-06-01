@@ -119,6 +119,17 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
       return {
         ...state,
         tasks: [...state.tasks, action.payload],
+        taskHistory: [...state.taskHistory, {
+          id: crypto.randomUUID(),
+          task_id: action.payload.id,
+          action: 'CREATED',
+          created_at: new Date().toISOString(),
+          details: {
+            title: action.payload.title,
+            description: action.payload.description,
+            priority: action.payload.priority
+          }
+        }]
       };
 
     case 'UPDATE_TASK':
@@ -129,11 +140,24 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
         ),
       };
 
-    case 'DELETE_TASK':
+    case 'DELETE_TASK': {
+      const deletedTask = state.tasks.find(task => task.id === action.payload);
       return {
         ...state,
         tasks: state.tasks.filter((task) => task.id !== action.payload),
+        taskHistory: [...state.taskHistory, {
+          id: crypto.randomUUID(),
+          task_id: action.payload,
+          action: 'DELETED',
+          created_at: new Date().toISOString(),
+          details: deletedTask ? {
+            title: deletedTask.title,
+            description: deletedTask.description,
+            priority: deletedTask.priority
+          } : null
+        }]
       };
+    }
 
     case 'COMPLETE_TASK': {
       const completedTask = state.tasks.find((task) => task.id === action.payload);
@@ -143,7 +167,7 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
       const newReward = {
         ...getRandomReward(),
         coins: earnedCoins,
-        source: 'task',
+        source: 'task' as const
       };
 
       playSound('VICTORY');
@@ -158,6 +182,18 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
         ...state,
         tasks: state.tasks.map((task) => (task.id === action.payload ? updatedTask : task)),
         rewards: [...state.rewards, newReward],
+        taskHistory: [...state.taskHistory, {
+          id: crypto.randomUUID(),
+          task_id: action.payload,
+          action: 'COMPLETED',
+          created_at: new Date().toISOString(),
+          details: {
+            title: completedTask.title,
+            description: completedTask.description,
+            priority: completedTask.priority,
+            reward: newReward
+          }
+        }],
         stats: {
           ...state.stats,
           tasksCompleted: state.stats.tasksCompleted + 1,
@@ -218,7 +254,6 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
       let newReward = null;
       let earnedCoins = 0;
 
-      // Only give reward if session was completed successfully
       if (action.payload.completed) {
         earnedCoins = calculateFocusCoins(sessionDurationMinutes);
         newReward = {
