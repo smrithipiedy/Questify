@@ -19,11 +19,11 @@ const FocusMode: React.FC = () => {
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
   const [showBreakModal, setShowBreakModal] = useState<boolean>(false);
   const [showCompletionModal, setShowCompletionModal] = useState<boolean>(false);
-  const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
   const [breakDuration, setBreakDuration] = useState<number>(5);
   const [currentReward, setCurrentReward] = useState<any>(null);
   const [showVictoryEffect, setShowVictoryEffect] = useState<boolean>(false);
   const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
+  const [showCustomTimer, setShowCustomTimer] = useState<boolean>(true);
 
   const requestNotificationPermission = async () => {
     if (!("Notification" in window)) {
@@ -113,9 +113,13 @@ const FocusMode: React.FC = () => {
   };
 
   const handleStartSession = (duration: number, isBreak: boolean = false) => {
+    setShowCustomTimer(false);
     if (!isBreak) {
       setFocusDuration(duration);
-      setShowTimerModal(true);
+      if (soundEnabled) {
+        playSound('BUTTON_CLICK');
+      }
+      startFocusSession(duration, selectedCharacter, false);
     } else {
       if (soundEnabled) {
         playSound('BUTTON_CLICK');
@@ -127,15 +131,6 @@ const FocusMode: React.FC = () => {
       
       startFocusSession(duration, selectedCharacter, isBreak);
     }
-  };
-
-  const handleConfirmTimer = () => {
-    if (soundEnabled) {
-      playSound('BUTTON_CLICK');
-    }
-    
-    startFocusSession(focusDuration, selectedCharacter, false);
-    setShowTimerModal(false);
   };
 
   const handleStartBreak = () => {
@@ -157,18 +152,17 @@ const FocusMode: React.FC = () => {
       playSound('BUTTON_CLICK');
     }
 
-    // Calculate actual elapsed time
     if (sessionStartTime) {
       const elapsedMinutes = (new Date().getTime() - sessionStartTime.getTime()) / (1000 * 60);
       const targetDuration = currentSession?.duration || 0;
       
-      // Only give reward if at least 95% of the target duration was completed
       const reward = endFocusSession(elapsedMinutes >= targetDuration * 0.95);
       if (reward) {
         setCurrentReward(reward);
         setShowVictoryEffect(true);
       }
     }
+    setShowCustomTimer(true);
   };
   
   const handleToggleSound = () => {
@@ -271,6 +265,46 @@ const FocusMode: React.FC = () => {
               </select>
             </div>
           )}
+
+          {showCustomTimer && (
+            <div className="mb-6 bg-gray-700 p-4 pixel-corners">
+              <h3 className="text-white font-['Press_Start_2P'] text-sm mb-4">Custom Timer Settings</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-white mb-2 font-['Press_Start_2P'] text-xs">
+                    Focus Duration (min):
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="120"
+                    value={focusDuration}
+                    onChange={(e) => setFocusDuration(Math.min(120, Math.max(1, parseInt(e.target.value))))}
+                    className="w-full bg-gray-600 text-white p-2 pixel-corners font-['Press_Start_2P'] text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block text-white mb-2 font-['Press_Start_2P'] text-xs">
+                    Break Duration (min):
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="30"
+                    value={breakDuration}
+                    onChange={(e) => setBreakDuration(Math.min(30, Math.max(1, parseInt(e.target.value))))}
+                    className="w-full bg-gray-600 text-white p-2 pixel-corners font-['Press_Start_2P'] text-xs"
+                  />
+                </div>
+              </div>
+              <button
+                onClick={() => handleStartSession(focusDuration)}
+                className="w-full bg-blue-600 text-white p-2 mt-4 pixel-btn font-['Press_Start_2P'] text-xs"
+              >
+                Start Custom Timer
+              </button>
+            </div>
+          )}
           
           <p className="text-gray-300 mb-6 text-center font-['Press_Start_2P'] text-xs">
             Start a focused work session to boost your productivity!
@@ -311,57 +345,6 @@ const FocusMode: React.FC = () => {
       {activeCharacter && currentSession && !currentSession.isBreak && (
         <StudyBuddy character={activeCharacter} isActive={true} />
       )}
-
-      <Modal
-        isOpen={showTimerModal}
-        onRequestClose={() => setShowTimerModal(false)}
-        className="bg-gray-900 p-6 rounded-lg pixel-border max-w-md mx-auto mt-20"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4"
-      >
-        <h3 className="text-white font-['Press_Start_2P'] text-lg mb-4">Timer Settings</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-white mb-2 font-['Press_Start_2P'] text-xs">
-              Focus Duration (minutes):
-            </label>
-            <input
-              type="number"
-              min="1"
-              max="120"
-              value={focusDuration}
-              onChange={(e) => setFocusDuration(Math.min(120, Math.max(1, parseInt(e.target.value))))}
-              className="w-full bg-gray-700 text-white p-2 pixel-corners font-['Press_Start_2P'] text-xs"
-            />
-          </div>
-          <div>
-            <label className="block text-white mb-2 font-['Press_Start_2P'] text-xs">
-              Break Duration (minutes):
-            </label>
-            <input
-              type="number"
-              min="1"
-              max="30"
-              value={breakDuration}
-              onChange={(e) => setBreakDuration(Math.min(30, Math.max(1, parseInt(e.target.value))))}
-              className="w-full bg-gray-700 text-white p-2 pixel-corners font-['Press_Start_2P'] text-xs"
-            />
-          </div>
-          <div className="flex justify-end gap-4">
-            <button
-              onClick={() => setShowTimerModal(false)}
-              className="bg-red-500 text-white px-4 py-2 pixel-btn font-['Press_Start_2P'] text-xs"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleConfirmTimer}
-              className="bg-green-500 text-white px-4 py-2 pixel-btn font-['Press_Start_2P'] text-xs"
-            >
-              Start Session
-            </button>
-          </div>
-        </div>
-      </Modal>
 
       <Modal
         isOpen={showBreakModal}
