@@ -66,17 +66,17 @@ const TaskList: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-900 p-6 rounded-lg pixel-border">
+    <div className="bg-gray-900 dark:bg-gray-800 p-6 rounded-lg pixel-border transition-colors duration-300">
       <div className="flex flex-col md:flex-row items-center justify-between mb-6">
-        <h2 className="text-lg text-white mb-4 md:mb-0 font-['Press_Start_2P']">Your Quests</h2>
+        <h2 className="text-lg text-white dark:text-gray-100 mb-4 md:mb-0 font-['Press_Start_2P']">Your Quests</h2>
         
         <div className="flex gap-3 flex-wrap justify-center">
-          <div className="flex items-center bg-gray-800 p-2 rounded pixel-corners">
-            <Filter size={16} className="text-white mr-2" />
+          <div className="flex items-center bg-gray-800 dark:bg-gray-700 p-2 rounded pixel-corners">
+            <Filter size={16} className="text-white dark:text-gray-200 mr-2" />
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value as TaskStatus | 'all')}
-              className="bg-gray-800 text-white font-['Press_Start_2P'] text-xs border-none focus:outline-none"
+              className="bg-gray-800 dark:bg-gray-700 text-white dark:text-gray-200 font-['Press_Start_2P'] text-xs border-none focus:outline-none"
             >
               <option value="all">All Quests</option>
               <option value="pending">Pending</option>
@@ -87,7 +87,7 @@ const TaskList: React.FC = () => {
           
           <button
             onClick={toggleForm}
-            className="bg-green-500 text-white p-2 pixel-btn font-['Press_Start_2P'] text-xs flex items-center"
+            className="bg-green-500 dark:bg-green-600 text-white p-2 pixel-btn font-['Press_Start_2P'] text-xs flex items-center hover:bg-green-600 dark:hover:bg-green-700 transition-colors"
           >
             <PlusSquare size={16} className="mr-2" />
             New Quest
@@ -98,10 +98,10 @@ const TaskList: React.FC = () => {
       {showForm && (
         <form
           onSubmit={handleAddTask}
-          className="bg-gray-800 p-4 mb-6 pixel-box animate-pixelate"
+          className="bg-gray-800 dark:bg-gray-700 p-4 mb-6 pixel-box animate-pixelate transition-colors duration-300"
         >
           <div className="mb-3">
-            <label htmlFor="title" className="block text-white mb-1 font-['Press_Start_2P'] text-xs">
+            <label htmlFor="title" className="block text-white dark:text-gray-200 mb-1 font-['Press_Start_2P'] text-xs">
               Title:
             </label>
             <input
@@ -109,34 +109,34 @@ const TaskList: React.FC = () => {
               type="text"
               value={newTaskTitle}
               onChange={(e) => setNewTaskTitle(e.target.value)}
-              className="w-full p-2 bg-gray-700 text-white font-['Press_Start_2P'] text-xs pixel-corners"
+              className="w-full p-2 bg-gray-700 dark:bg-gray-600 text-white dark:text-gray-100 font-['Press_Start_2P'] text-xs pixel-corners"
               placeholder="Enter quest title"
               required
             />
           </div>
           
           <div className="mb-3">
-            <label htmlFor="description" className="block text-white mb-1 font-['Press_Start_2P'] text-xs">
+            <label htmlFor="description" className="block text-white dark:text-gray-200 mb-1 font-['Press_Start_2P'] text-xs">
               Description:
             </label>
             <textarea
               id="description"
               value={newTaskDescription}
               onChange={(e) => setNewTaskDescription(e.target.value)}
-              className="w-full p-2 bg-gray-700 text-white font-['Press_Start_2P'] text-xs pixel-corners h-20 resize-none"
+              className="w-full p-2 bg-gray-700 dark:bg-gray-600 text-white dark:text-gray-100 font-['Press_Start_2P'] text-xs pixel-corners h-20 resize-none"
               placeholder="Describe your quest"
             />
           </div>
           
           <div className="mb-4">
-            <label htmlFor="priority" className="block text-white mb-1 font-['Press_Start_2P'] text-xs">
+            <label htmlFor="priority" className="block text-white dark:text-gray-200 mb-1 font-['Press_Start_2P'] text-xs">
               Priority:
             </label>
             <select
               id="priority"
               value={newTaskPriority}
               onChange={(e) => setNewTaskPriority(e.target.value as TaskPriority)}
-              className="w-full p-2 bg-gray-700 text-white font-['Press_Start_2P'] text-xs pixel-corners"
+              className="w-full p-2 bg-gray-700 dark:bg-gray-600 text-white dark:text-gray-100 font-['Press_Start_2P'] text-xs pixel-corners"
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>
@@ -148,13 +148,13 @@ const TaskList: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="bg-red-500 text-white px-4 py-2 font-['Press_Start_2P'] text-xs pixel-btn"
+              className="bg-red-500 dark:bg-red-600 text-white px-4 py-2 font-['Press_Start_2P'] text-xs pixel-btn hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-green-500 text-white px-4 py-2 font-['Press_Start_2P'] text-xs pixel-btn"
+              className="bg-green-500 dark:bg-green-600 text-white px-4 py-2 font-['Press_Start_2P'] text-xs pixel-btn hover:bg-green-600 dark:hover:bg-green-700 transition-colors"
             >
               Add Quest
             </button>
@@ -163,7 +163,7 @@ const TaskList: React.FC = () => {
       )}
       
       {sortedTasks.length === 0 ? (
-        <div className="text-center p-8 text-gray-400 font-['Press_Start_2P'] text-xs">
+        <div className="text-center p-8 text-gray-400 dark:text-gray-500 font-['Press_Start_2P'] text-xs">
           No quests available. Create a new quest to begin your adventure!
         </div>
       ) : (

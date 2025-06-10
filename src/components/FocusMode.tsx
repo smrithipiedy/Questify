@@ -178,17 +178,17 @@ const FocusMode: React.FC = () => {
   const activeCharacter = characters.find(c => c.id === selectedCharacter && c.unlocked);
 
   return (
-    <div className="bg-gray-900 p-6 rounded-lg pixel-border">
+    <div className="bg-gray-900 dark:bg-gray-800 p-6 rounded-lg pixel-border transition-colors duration-300">
       <div className="flex flex-col md:flex-row items-center justify-between mb-6">
-        <h2 className="text-lg text-white mb-4 md:mb-0 flex items-center font-['Press_Start_2P']">
-          <Shield size={20} className="mr-2 text-blue-400" />
+        <h2 className="text-lg text-white dark:text-gray-100 mb-4 md:mb-0 flex items-center font-['Press_Start_2P']">
+          <Shield size={20} className="mr-2 text-blue-400 dark:text-blue-300" />
           {currentSession?.isBreak ? 'Break Time' : 'Focus Mode'}
         </h2>
         
         <div className="flex items-center gap-3">
           <button
             onClick={handleToggleSound}
-            className="bg-gray-700 text-white p-2 rounded-full pixel-corners"
+            className="bg-gray-700 dark:bg-gray-600 text-white p-2 rounded-full pixel-corners hover:bg-gray-600 dark:hover:bg-gray-500 transition-colors"
             title={soundEnabled ? 'Mute sounds' : 'Enable sounds'}
           >
             {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
@@ -202,19 +202,19 @@ const FocusMode: React.FC = () => {
                 checked={blockSocialMedia}
                 onChange={() => setBlockSocialMedia(!blockSocialMedia)}
               />
-              <div className={`w-10 h-6 ${blockSocialMedia ? 'bg-green-500' : 'bg-gray-700'} pixel-corners transition-colors`}></div>
+              <div className={`w-10 h-6 ${blockSocialMedia ? 'bg-green-500 dark:bg-green-600' : 'bg-gray-700 dark:bg-gray-600'} pixel-corners transition-colors`}></div>
               <div className={`absolute left-1 top-1 w-4 h-4 bg-white pixel-corners transition-transform ${blockSocialMedia ? 'transform translate-x-4' : ''}`}></div>
             </div>
-            <span className="ml-2 text-white text-xs font-['Press_Start_2P']">Block Social Media</span>
+            <span className="ml-2 text-white dark:text-gray-200 text-xs font-['Press_Start_2P']">Block Social Media</span>
           </label>
         </div>
       </div>
 
       {currentSession ? (
-        <div className="bg-gray-800 p-6 rounded-lg pixel-box animate-pixelate">
+        <div className="bg-gray-800 dark:bg-gray-700 p-6 rounded-lg pixel-box animate-pixelate transition-colors duration-300">
           <div className="flex flex-col items-center mb-4">
-            <h3 className="text-2xl font-bold text-white mb-2 font-['Press_Start_2P']">{formatTime(timeLeft)}</h3>
-            <p className="text-gray-400 text-xs font-['Press_Start_2P']">
+            <h3 className="text-2xl font-bold text-white dark:text-gray-100 mb-2 font-['Press_Start_2P']">{formatTime(timeLeft)}</h3>
+            <p className="text-gray-400 dark:text-gray-500 text-xs font-['Press_Start_2P']">
               {currentSession.isBreak ? 'Break Time Remaining' : 'Focus Time Remaining'}
             </p>
           </div>
@@ -229,15 +229,15 @@ const FocusMode: React.FC = () => {
           </div>
           
           {blockSocialMedia && !currentSession.isBreak && (
-            <div className="bg-red-900 p-4 mb-6 text-center pixel-corners">
-              <p className="text-white text-xs font-['Press_Start_2P']">🛡️ Distractions Blocked</p>
+            <div className="bg-red-900 dark:bg-red-800 p-4 mb-6 text-center pixel-corners transition-colors duration-300">
+              <p className="text-white dark:text-gray-100 text-xs font-['Press_Start_2P']">🛡️ Distractions Blocked</p>
             </div>
           )}
           
           <div className="flex justify-center">
             <button
               onClick={handleEndSession}
-              className="bg-red-500 text-white px-4 py-2 flex items-center pixel-btn font-['Press_Start_2P'] text-xs"
+              className="bg-red-500 dark:bg-red-600 text-white px-4 py-2 flex items-center pixel-btn font-['Press_Start_2P'] text-xs hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
             >
               <XCircle size={16} className="mr-2" />
               End Session
@@ -245,16 +245,16 @@ const FocusMode: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-gray-800 p-6 rounded-lg pixel-box">
+        <div className="bg-gray-800 dark:bg-gray-700 p-6 rounded-lg pixel-box transition-colors duration-300">
           {characters.some(c => c.unlocked) && (
             <div className="mb-6">
-              <label className="block text-white mb-2 font-['Press_Start_2P'] text-xs">
+              <label className="block text-white dark:text-gray-200 mb-2 font-['Press_Start_2P'] text-xs">
                 Select Study Buddy:
               </label>
               <select
                 value={selectedCharacter || ''}
                 onChange={(e) => setSelectedCharacter(e.target.value)}
-                className="w-full bg-gray-700 text-white p-2 pixel-corners font-['Press_Start_2P'] text-xs"
+                className="w-full bg-gray-700 dark:bg-gray-600 text-white dark:text-gray-100 p-2 pixel-corners font-['Press_Start_2P'] text-xs"
               >
                 <option value="">None</option>
                 {characters.filter(c => c.unlocked).map(character => (
@@ -267,11 +267,11 @@ const FocusMode: React.FC = () => {
           )}
 
           {showCustomTimer && (
-            <div className="mb-6 bg-gray-700 p-4 pixel-corners">
-              <h3 className="text-white font-['Press_Start_2P'] text-sm mb-4">Custom Timer Settings</h3>
+            <div className="mb-6 bg-gray-700 dark:bg-gray-600 p-4 pixel-corners transition-colors duration-300">
+              <h3 className="text-white dark:text-gray-100 font-['Press_Start_2P'] text-sm mb-4">Custom Timer Settings</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-white mb-2 font-['Press_Start_2P'] text-xs">
+                  <label className="block text-white dark:text-gray-200 mb-2 font-['Press_Start_2P'] text-xs">
                     Focus Duration (min):
                   </label>
                   <input
@@ -280,11 +280,11 @@ const FocusMode: React.FC = () => {
                     max="120"
                     value={focusDuration}
                     onChange={(e) => setFocusDuration(Math.min(120, Math.max(1, parseInt(e.target.value))))}
-                    className="w-full bg-gray-600 text-white p-2 pixel-corners font-['Press_Start_2P'] text-xs"
+                    className="w-full bg-gray-600 dark:bg-gray-500 text-white dark:text-gray-100 p-2 pixel-corners font-['Press_Start_2P'] text-xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-white mb-2 font-['Press_Start_2P'] text-xs">
+                  <label className="block text-white dark:text-gray-200 mb-2 font-['Press_Start_2P'] text-xs">
                     Break Duration (min):
                   </label>
                   <input
@@ -293,20 +293,20 @@ const FocusMode: React.FC = () => {
                     max="30"
                     value={breakDuration}
                     onChange={(e) => setBreakDuration(Math.min(30, Math.max(1, parseInt(e.target.value))))}
-                    className="w-full bg-gray-600 text-white p-2 pixel-corners font-['Press_Start_2P'] text-xs"
+                    className="w-full bg-gray-600 dark:bg-gray-500 text-white dark:text-gray-100 p-2 pixel-corners font-['Press_Start_2P'] text-xs"
                   />
                 </div>
               </div>
               <button
                 onClick={() => handleStartSession(focusDuration)}
-                className="w-full bg-blue-600 text-white p-2 mt-4 pixel-btn font-['Press_Start_2P'] text-xs"
+                className="w-full bg-blue-600 dark:bg-blue-700 text-white p-2 mt-4 pixel-btn font-['Press_Start_2P'] text-xs hover:bg-blue-700 dark:hover:bg-blue-800 transition-colors"
               >
                 Start Custom Timer
               </button>
             </div>
           )}
           
-          <p className="text-gray-300 mb-6 text-center font-['Press_Start_2P'] text-xs">
+          <p className="text-gray-300 dark:text-gray-400 mb-6 text-center font-['Press_Start_2P'] text-xs">
             Start a focused work session to boost your productivity!
             {blockSocialMedia && " All distractions will be blocked during your focus time."}
           </p>
@@ -314,7 +314,7 @@ const FocusMode: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <button
               onClick={() => handleStartSession(15)}
-              className="bg-blue-600 text-white p-3 pixel-btn flex flex-col items-center justify-center font-['Press_Start_2P'] text-xs"
+              className="bg-blue-600 dark:bg-blue-700 text-white p-3 pixel-btn flex flex-col items-center justify-center font-['Press_Start_2P'] text-xs hover:bg-blue-700 dark:hover:bg-blue-800 transition-colors"
             >
               <Timer size={24} className="mb-2" />
               <span className="text-lg font-bold">15:00</span>
@@ -323,7 +323,7 @@ const FocusMode: React.FC = () => {
             
             <button
               onClick={() => handleStartSession(25)}
-              className="bg-green-600 text-white p-3 pixel-btn flex flex-col items-center justify-center font-['Press_Start_2P'] text-xs"
+              className="bg-green-600 dark:bg-green-700 text-white p-3 pixel-btn flex flex-col items-center justify-center font-['Press_Start_2P'] text-xs hover:bg-green-700 dark:hover:bg-green-800 transition-colors"
             >
               <Timer size={24} className="mb-2" />
               <span className="text-lg font-bold">25:00</span>
@@ -332,7 +332,7 @@ const FocusMode: React.FC = () => {
             
             <button
               onClick={() => handleStartSession(50)}
-              className="bg-purple-600 text-white p-3 pixel-btn flex flex-col items-center justify-center font-['Press_Start_2P'] text-xs"
+              className="bg-purple-600 dark:bg-purple-700 text-white p-3 pixel-btn flex flex-col items-center justify-center font-['Press_Start_2P'] text-xs hover:bg-purple-700 dark:hover:bg-purple-800 transition-colors"
             >
               <Timer size={24} className="mb-2" />
               <span className="text-lg font-bold">50:00</span>
@@ -349,16 +349,16 @@ const FocusMode: React.FC = () => {
       <Modal
         isOpen={showBreakModal}
         onRequestClose={() => setShowBreakModal(false)}
-        className="bg-gray-900 p-6 rounded-lg pixel-border max-w-md mx-auto mt-20"
+        className="bg-gray-900 dark:bg-gray-800 p-6 rounded-lg pixel-border max-w-md mx-auto mt-20 transition-colors duration-300"
         overlayClassName="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4"
       >
-        <h3 className="text-white font-['Press_Start_2P'] text-lg mb-4">Take a Break?</h3>
-        <p className="text-gray-300 font-['Press_Start_2P'] text-xs mb-6">
+        <h3 className="text-white dark:text-gray-100 font-['Press_Start_2P'] text-lg mb-4">Take a Break?</h3>
+        <p className="text-gray-300 dark:text-gray-400 font-['Press_Start_2P'] text-xs mb-6">
           Great work on your focus session! Would you like to take a break?
         </p>
         <div className="space-y-4">
           <div>
-            <label className="block text-white mb-2 font-['Press_Start_2P'] text-xs">
+            <label className="block text-white dark:text-gray-200 mb-2 font-['Press_Start_2P'] text-xs">
               Break Duration (minutes):
             </label>
             <input
@@ -367,19 +367,19 @@ const FocusMode: React.FC = () => {
               max="30"
               value={breakDuration}
               onChange={(e) => setBreakDuration(Math.min(30, Math.max(1, parseInt(e.target.value))))}
-              className="w-full bg-gray-700 text-white p-2 pixel-corners font-['Press_Start_2P'] text-xs mb-4"
+              className="w-full bg-gray-700 dark:bg-gray-600 text-white dark:text-gray-100 p-2 pixel-corners font-['Press_Start_2P'] text-xs mb-4"
             />
           </div>
           <div className="flex justify-center gap-4">
             <button
               onClick={handleSkipBreak}
-              className="bg-red-500 text-white px-4 py-2 pixel-btn font-['Press_Start_2P'] text-xs"
+              className="bg-red-500 dark:bg-red-600 text-white px-4 py-2 pixel-btn font-['Press_Start_2P'] text-xs hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
             >
               Skip Break
             </button>
             <button
               onClick={handleStartBreak}
-              className="bg-green-500 text-white px-4 py-2 pixel-btn font-['Press_Start_2P'] text-xs"
+              className="bg-green-500 dark:bg-green-600 text-white px-4 py-2 pixel-btn font-['Press_Start_2P'] text-xs hover:bg-green-600 dark:hover:bg-green-700 transition-colors"
             >
               Start Break
             </button>
@@ -401,19 +401,19 @@ const FocusMode: React.FC = () => {
       <Modal
         isOpen={showCompletionModal}
         onRequestClose={() => setShowCompletionModal(false)}
-        className="bg-gray-900 p-6 rounded-lg pixel-border max-w-md mx-auto mt-20"
+        className="bg-gray-900 dark:bg-gray-800 p-6 rounded-lg pixel-border max-w-md mx-auto mt-20 transition-colors duration-300"
         overlayClassName="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4"
       >
         <div className="text-center">
-          <h3 className="text-white font-['Press_Start_2P'] text-lg mb-4">
+          <h3 className="text-white dark:text-gray-100 font-['Press_Start_2P'] text-lg mb-4">
             Great job, keep it up! 🎉
           </h3>
-          <p className="text-gray-300 font-['Press_Start_2P'] text-xs mb-6">
+          <p className="text-gray-300 dark:text-gray-400 font-['Press_Start_2P'] text-xs mb-6">
             You've completed your focus session. Remember, consistency is key to success!
           </p>
           <button
             onClick={() => setShowCompletionModal(false)}
-            className="bg-green-500 text-white px-4 py-2 pixel-btn font-['Press_Start_2P'] text-xs"
+            className="bg-green-500 dark:bg-green-600 text-white px-4 py-2 pixel-btn font-['Press_Start_2P'] text-xs hover:bg-green-600 dark:hover:bg-green-700 transition-colors"
           >
             Close
           </button>

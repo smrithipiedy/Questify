@@ -13,3 +13,68 @@
 .welcome-text {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
+
+/* Dark mode specific styles */
+.dark .pixel-border {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .pixel-box {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .pixel-progress {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .pixel-progress-bar {
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+}
+
+.dark .pixel-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark .screen-flicker {
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+/* Light mode overrides */
+.light .bg-gradient-to-b {
+  background: linear-gradient(to bottom, #e0e7ff, #f3f4f6);
+}
+
+.light .text-white {
+  color: #1f2937;
+}
+
+.light .bg-gray-900 {
+  background-color: #f9fafb;
+  border: 2px solid #d1d5db;
+}
+
+.light .bg-gray-800 {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+.light .bg-gray-700 {
+  background-color: #f3f4f6;
+}
+
+.light .text-gray-400 {
+  color: #6b7280;
+}
+
+.light .text-gray-300 {
+  color: #4b5563;
+}
+
+.light .pixel-progress {
+  background-color: #e5e7eb;
+}
+
+.light .pixel-progress-bar {
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+}
