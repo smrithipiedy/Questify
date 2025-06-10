@@ -32,6 +32,7 @@ export interface Reward {
   imageUrl: string;
   unlockedAt: Date;
   coins: number;
+  source: 'task' | 'focus';
 }
 
 export interface FocusSession {
@@ -51,7 +52,7 @@ export interface Stats {
   totalFocusTime: number; // in minutes
   rewardsCollected: number;
   coins: number;
-  pomodoroStreak: number;
+  pomodoroStreak?: number;
   lastPomodoroDate?: Date;
 }
 

@@ -18,10 +18,10 @@ type TaskAction =
   | { type: 'ADD_TASK'; payload: Task }
   | { type: 'UPDATE_TASK'; payload: Task }
   | { type: 'DELETE_TASK'; payload: string }
-  | { type: 'COMPLETE_TASK'; payload: string }
+  | { type: 'COMPLETE_TASK'; payload: { taskId: string; reward: Reward } }
   | { type: 'ADD_REWARD'; payload: Reward }
   | { type: 'START_FOCUS_SESSION'; payload: FocusSession }
-  | { type: 'END_FOCUS_SESSION'; payload: { endTime: Date; completed: boolean } }
+  | { type: 'END_FOCUS_SESSION'; payload: { endTime: Date; completed: boolean; reward?: Reward } }
   | { type: 'UPDATE_STATS'; payload: Partial<Stats> }
   | { type: 'UNLOCK_CHARACTER'; payload: { characterId: string; cost: number } };
 
@@ -160,16 +160,10 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
     }
 
     case 'COMPLETE_TASK': {
-      const completedTask = state.tasks.find((task) => task.id === action.payload);
+      const completedTask = state.tasks.find((task) => task.id === action.payload.taskId);
       if (!completedTask) return state;
 
-      const earnedCoins = calculateTaskCoins(completedTask);
-      const newReward = {
-        ...getRandomReward(),
-        coins: earnedCoins,
-        source: 'task' as const
-      };
-
+      const reward = action.payload.reward;
       playSound('VICTORY');
 
       const updatedTask = {
@@ -180,25 +174,25 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
 
       return {
         ...state,
-        tasks: state.tasks.map((task) => (task.id === action.payload ? updatedTask : task)),
-        rewards: [...state.rewards, newReward],
+        tasks: state.tasks.map((task) => (task.id === action.payload.taskId ? updatedTask : task)),
+        rewards: [...state.rewards, reward],
         taskHistory: [...state.taskHistory, {
           id: crypto.randomUUID(),
-          task_id: action.payload,
+          task_id: action.payload.taskId,
           action: 'COMPLETED',
           created_at: new Date().toISOString(),
           details: {
             title: completedTask.title,
             description: completedTask.description,
             priority: completedTask.priority,
-            reward: newReward
+            reward: reward
           }
         }],
         stats: {
           ...state.stats,
           tasksCompleted: state.stats.tasksCompleted + 1,
           rewardsCollected: state.stats.rewardsCollected + 1,
-          coins: state.stats.coins + earnedCoins,
+          coins: state.stats.coins + reward.coins,
         },
       };
     }
@@ -251,16 +245,14 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
       const sessionDurationMinutes =
         (endedSession.endTime!.getTime() - endedSession.startTime.getTime()) / (1000 * 60);
 
-      let newReward = null;
+      let newRewards = state.rewards;
       let earnedCoins = 0;
+      let rewardsCollected = state.stats.rewardsCollected;
 
-      if (action.payload.completed) {
-        earnedCoins = calculateFocusCoins(sessionDurationMinutes);
-        newReward = {
-          ...getRandomReward(),
-          coins: earnedCoins,
-          source: 'focus',
-        };
+      if (action.payload.completed && action.payload.reward) {
+        earnedCoins = action.payload.reward.coins;
+        newRewards = [...state.rewards, action.payload.reward];
+        rewardsCollected += 1;
       }
 
       return {
@@ -269,11 +261,11 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
         focusSessions: state.focusSessions.map((session) =>
           session.id === endedSession.id ? endedSession : session
         ),
-        rewards: newReward ? [...state.rewards, newReward] : state.rewards,
+        rewards: newRewards,
         stats: {
           ...state.stats,
           totalFocusTime: state.stats.totalFocusTime + sessionDurationMinutes,
-          rewardsCollected: newReward ? state.stats.rewardsCollected + 1 : state.stats.rewardsCollected,
+          rewardsCollected,
           coins: state.stats.coins + earnedCoins,
         },
       };
@@ -400,8 +392,17 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const completeTask = (id: string): Reward => {
-    dispatch({ type: 'COMPLETE_TASK', payload: id });
-    const reward = state.rewards[state.rewards.length - 1];
+    const task = state.tasks.find(t => t.id === id);
+    if (!task) throw new Error('Task not found');
+    
+    const earnedCoins = calculateTaskCoins(task);
+    const reward: Reward = {
+      ...getRandomReward(),
+      coins: earnedCoins,
+      source: 'task' as const
+    };
+    
+    dispatch({ type: 'COMPLETE_TASK', payload: { taskId: id, reward } });
     return reward;
   };
 
@@ -417,18 +418,32 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const endFocusSession = (completed: boolean): Reward | null => {
+    if (!state.currentSession) return null;
+    
+    let reward: Reward | null = null;
+    
+    if (completed) {
+      const sessionDurationMinutes =
+        (new Date().getTime() - state.currentSession.startTime.getTime()) / (1000 * 60);
+      const earnedCoins = calculateFocusCoins(sessionDurationMinutes);
+      
+      reward = {
+        ...getRandomReward(),
+        coins: earnedCoins,
+        source: 'focus' as const
+      };
+    }
+    
     dispatch({ 
       type: 'END_FOCUS_SESSION', 
       payload: { 
         endTime: new Date(),
-        completed
+        completed,
+        reward: reward || undefined
       } 
     });
     
-    if (completed && state.rewards.length > 0) {
-      return state.rewards[state.rewards.length - 1];
-    }
-    return null;
+    return reward;
   };
 
   const unlockCharacter = (characterId: string, cost: number) => {
