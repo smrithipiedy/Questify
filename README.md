@@ -6,14 +6,14 @@ P.S, this was my winning project at the Google Developer Groups Chennai Vibe Cod
 
 ## 🌟 Features
 
-- ✅ **Add/Delete Tasks (Quests)**  
-- 🧠 **Gamified UX** with dynamic visuals  
-- ⏱️ **Pomodoro Timer** with work and break intervals  
-- 📋 **Task Management System**  
-- 🔗 **Supabase Integration** for future backend features  
-- ⚡ **Vite** for fast build and development  
-- 💅 **Tailwind CSS** for utility-first styling  
-- 🌐 **Fully Responsive** on mobile and desktop
+- **Add/Delete Tasks (Quests)**  
+- **Gamified UX** with dynamic visuals  
+- **Pomodoro Timer** with work and break intervals  
+- **Task Management System**  
+- **Supabase Integration** for future backend features  
+- **Vite** for fast build and development  
+- **Tailwind CSS** for utility-first styling  
+- **Fully Responsive** on mobile and desktop
 
 ## 🧰 Tech Stack
 
@@ -71,7 +71,7 @@ npm run build
 
 ## 🙋‍♀️ Author
 
-Built with love and focus by [Smrithi P] for the Vibe Coding challenge held by Google Developer Groups, Chennai.(https://github.com/smrithipiedy)
+Built by Smrithi P for the Vibe Coding challenge held by Google Developer Groups, Chennai.
 
 ## 📜 License
 
