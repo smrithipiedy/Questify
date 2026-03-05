@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { TaskProvider } from './context/TaskContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import LandingPage from './components/LandingPage';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Login from './components/auth/Login';
@@ -55,14 +56,18 @@ function App() {
               <Header />
               <main className="flex-grow">
                 <Routes>
+                  <Route path="/welcome" element={<LandingPage />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
-                  <Route path="/" element={
+                  <Route path="/dashboard" element={
                     <PrivateRoute>
                       <Dashboard />
                     </PrivateRoute>
+                  } />
+                  <Route path="/" element={
+                    session ? <Navigate to="/dashboard" /> : <Navigate to="/welcome" />
                   } />
                   <Route path="/rewards" element={
                     <PrivateRoute>

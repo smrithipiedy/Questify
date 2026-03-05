@@ -44,7 +44,7 @@ const Header: React.FC = () => {
             <button
               onClick={toggleMenu}
               className="p-2 hover:bg-blue-600 dark:hover:bg-blue-700 pixel-corners transition-colors"
-            >
+              Home
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
             <Link to="/" className="text-xl screen-flicker">QUESTIFY</Link>

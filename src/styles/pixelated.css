@@ -1,5 +1,210 @@
 /* Existing styles... */
 
+/* Enhanced 8-bit animations */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-twinkle {
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+/* Pixel-perfect elements */
+.pixel-dot {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.pixel-corners {
+  border-radius: 0;
+  image-rendering: pixelated;
+}
+
+/* Enhanced pixel borders */
+.pixel-border {
+  border: 4px solid;
+  border-image: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b) 1;
+  position: relative;
+}
+
+.pixel-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+  z-index: -1;
+  border-radius: 0;
+}
+
+/* Enhanced pixel box */
+.pixel-box {
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.pixel-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.pixel-box:hover::before {
+  left: 100%;
+}
+
+/* Enhanced pixel button */
+.pixel-btn {
+  border: 2px solid currentColor;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pixel-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.3s;
+}
+
+.pixel-btn:hover::before {
+  left: 100%;
+}
+
+.pixel-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.pixel-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced progress bar */
+.pixel-progress {
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  height: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.pixel-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.pixel-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.1) 2px,
+    rgba(255, 255, 255, 0.1) 4px
+  );
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Screen flicker effect */
+.screen-flicker {
+  animation: flicker 0.15s infinite linear alternate;
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.95;
+  }
+}
+
+/* Pixelate animation */
+@keyframes pixelate {
+  0% {
+    filter: blur(2px);
+    transform: scale(0.98);
+  }
+  100% {
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+.animate-pixelate {
+  animation: pixelate 0.3s ease-out;
+}
+
 @keyframes wave {
   0%, 100% {
     transform: translateY(0);
@@ -16,65 +221,81 @@
 
 /* Dark mode specific styles */
 .dark .pixel-border {
-  border-color: rgba(255, 255, 255, 0.2);
+  border-image: linear-gradient(45deg, #60a5fa, #a78bfa, #f472b6, #fbbf24) 1;
 }
 
 .dark .pixel-box {
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .dark .pixel-progress {
-  background-color: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .dark .pixel-progress-bar {
-  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
 }
 
 .dark .pixel-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .dark .screen-flicker {
-  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.7), 0 0 20px rgba(139, 92, 246, 0.3);
 }
 
 /* Light mode overrides */
-.light .bg-gradient-to-b {
-  background: linear-gradient(to bottom, #e0e7ff, #f3f4f6);
+.light .pixel-border {
+  border-image: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b) 1;
 }
 
-.light .text-white {
-  color: #1f2937;
-}
-
-.light .bg-gray-900 {
-  background-color: #f9fafb;
-  border: 2px solid #d1d5db;
-}
-
-.light .bg-gray-800 {
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-}
-
-.light .bg-gray-700 {
-  background-color: #f3f4f6;
-}
-
-.light .text-gray-400 {
-  color: #6b7280;
-}
-
-.light .text-gray-300 {
-  color: #4b5563;
+.light .pixel-box {
+  border-color: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .light .pixel-progress {
-  background-color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.3);
 }
 
 .light .pixel-progress-bar {
-  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+}
+
+.light .pixel-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.light .screen-flicker {
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+/* Grid system for pixel backgrounds */
+.grid-cols-16 {
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+}
+
+.grid-rows-12 {
+  grid-template-rows: repeat(12, minmax(0, 1fr));
+}
+
+/* Retro glow effects */
+.retro-glow {
+  box-shadow: 
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 15px currentColor,
+    0 0 20px currentColor;
+}
+
+.retro-text-glow {
+  text-shadow: 
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 15px currentColor;
 }
