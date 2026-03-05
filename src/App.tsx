@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { TaskProvider } from './context/TaskContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
-import LandingPage from './components/LandingPage';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Login from './components/auth/Login';
@@ -16,47 +15,8 @@ import CharacterShop from './components/CharacterShop';
 import './styles/pixelated.css';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
-  const { session, loading } = useAuth();
-  
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-gradient-to-b from-purple-900 to-gray-900 dark:from-purple-800 dark:to-gray-800">
-        <div className="text-center font-['Press_Start_2P'] text-xs text-white">
-          <h1 className="text-lg mb-4">LOADING...</h1>
-          <div className="w-64 pixel-progress">
-            <div 
-              className="pixel-progress-bar animate-pulse"
-              style={{ width: '75%' }}
-            ></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  
+  const { session } = useAuth();
   return session ? children : <Navigate to="/login" />;
-};
-
-const AuthRedirector = () => {
-  const { session, loading } = useAuth();
-  
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-gradient-to-b from-purple-900 to-gray-900 dark:from-purple-800 dark:to-gray-800">
-        <div className="text-center font-['Press_Start_2P'] text-xs text-white">
-          <h1 className="text-lg mb-4">LOADING...</h1>
-          <div className="w-64 pixel-progress">
-            <div 
-              className="pixel-progress-bar animate-pulse"
-              style={{ width: '75%' }}
-            ></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  
-  return session ? <Navigate to="/dashboard" /> : <Navigate to="/welcome" />;
 };
 
 function App() {
@@ -95,18 +55,14 @@ function App() {
               <Header />
               <main className="flex-grow">
                 <Routes>
-                  <Route path="/welcome" element={<LandingPage />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
-                  <Route path="/dashboard" element={
+                  <Route path="/" element={
                     <PrivateRoute>
                       <Dashboard />
                     </PrivateRoute>
-                  } />
-                  <Route path="/" element={
-                    <AuthRedirector />
                   } />
                   <Route path="/rewards" element={
                     <PrivateRoute>
