@@ -16,8 +16,47 @@ import CharacterShop from './components/CharacterShop';
 import './styles/pixelated.css';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
-  const { session } = useAuth();
+  const { session, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gradient-to-b from-purple-900 to-gray-900 dark:from-purple-800 dark:to-gray-800">
+        <div className="text-center font-['Press_Start_2P'] text-xs text-white">
+          <h1 className="text-lg mb-4">LOADING...</h1>
+          <div className="w-64 pixel-progress">
+            <div 
+              className="pixel-progress-bar animate-pulse"
+              style={{ width: '75%' }}
+            ></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
   return session ? children : <Navigate to="/login" />;
+};
+
+const AuthRedirector = () => {
+  const { session, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gradient-to-b from-purple-900 to-gray-900 dark:from-purple-800 dark:to-gray-800">
+        <div className="text-center font-['Press_Start_2P'] text-xs text-white">
+          <h1 className="text-lg mb-4">LOADING...</h1>
+          <div className="w-64 pixel-progress">
+            <div 
+              className="pixel-progress-bar animate-pulse"
+              style={{ width: '75%' }}
+            ></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  return session ? <Navigate to="/dashboard" /> : <Navigate to="/welcome" />;
 };
 
 function App() {
@@ -67,7 +106,7 @@ function App() {
                     </PrivateRoute>
                   } />
                   <Route path="/" element={
-                    session ? <Navigate to="/dashboard" /> : <Navigate to="/welcome" />
+                    <AuthRedirector />
                   } />
                   <Route path="/rewards" element={
                     <PrivateRoute>
